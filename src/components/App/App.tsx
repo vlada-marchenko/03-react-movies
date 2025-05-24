@@ -19,20 +19,21 @@ export default function App() {
   const handleSearch = async (query: string) => {
     setMovies([])
     setIsLoading(true)
+    setIsError(false)
     try {
-      const response = await fetchMovies({query, ...defaultFetchParams}
-      )
+      const response = await fetchMovies({query, ...defaultFetchParams})
+
        if(response.data.results.length === 0){
        toast('No movies found for your request.')
        return
-    }
+       }
 
       setMovies(response.data.results)
     } catch(error) {
       setIsError(true)
       console.error(error)
     } finally {
-        setIsLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -44,7 +45,7 @@ const closeModal = () => setSelectedMovie(null)
     <Toaster />
     <SearchBar onSubmit={handleSearch}/>
     { isLoading && <Loader/> }
-    { isError ? <ErrorMessage/> : <MovieGrid movies={movies} onSelectMovie={openModal}/> }
+    { isError ? <ErrorMessage/> : <MovieGrid movies={movies} onSelect={openModal}/> }
     { selectedMovie && <MovieModal movie={selectedMovie} onClose={closeModal}/>}
     </>
   )
